@@ -29,5 +29,6 @@ namespace CourseWork_OLX.Controllers
             })
             .ToArray();
         }
+        
     }
 }
