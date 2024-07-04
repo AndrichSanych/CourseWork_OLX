@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35013.160
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseWork_OLX", "CourseWork_OLX\CourseWork_OLX.csproj", "{6FFAC927-711A-4919-A09E-34FE97774E59}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourseWork_OLX", "CourseWork_OLX\CourseWork_OLX.csproj", "{6FFAC927-711A-4919-A09E-34FE97774E59}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{87EA31C9-701B-4F00-8ACC-8FD82E5AA81F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLogic", "BusinessLogic\BusinessLogic.csproj", "{980006BD-C85A-4A2E-938B-6C703A478A82}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{6FFAC927-711A-4919-A09E-34FE97774E59}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6FFAC927-711A-4919-A09E-34FE97774E59}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6FFAC927-711A-4919-A09E-34FE97774E59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87EA31C9-701B-4F00-8ACC-8FD82E5AA81F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87EA31C9-701B-4F00-8ACC-8FD82E5AA81F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87EA31C9-701B-4F00-8ACC-8FD82E5AA81F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87EA31C9-701B-4F00-8ACC-8FD82E5AA81F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{980006BD-C85A-4A2E-938B-6C703A478A82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{980006BD-C85A-4A2E-938B-6C703A478A82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{980006BD-C85A-4A2E-938B-6C703A478A82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{980006BD-C85A-4A2E-938B-6C703A478A82}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
