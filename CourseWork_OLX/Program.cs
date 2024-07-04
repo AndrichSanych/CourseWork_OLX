@@ -1,3 +1,4 @@
+using CourseWork_OLX.Extensions;
 using DataAccess;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +13,14 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var serviceProvider = scope.ServiceProvider;
+    serviceProvider.SeedRoles().Wait();
+    serviceProvider.SeedAdmin().Wait();
+    serviceProvider.SeedData().Wait();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

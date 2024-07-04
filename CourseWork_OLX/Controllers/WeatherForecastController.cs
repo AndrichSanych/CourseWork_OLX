@@ -25,7 +25,7 @@ namespace CourseWork_OLX.Controllers
         [HttpGet(Name = "GetWeatherForecast")]
         public async Task< IEnumerable<WeatherForecast>> Get()
         {
-           
+            await users.SaveAsync();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
