@@ -1,4 +1,6 @@
+using BusinessLogic.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using BusinessLogic.Entities;
 
 namespace CourseWork_OLX.Controllers
 {
@@ -12,15 +14,18 @@ namespace CourseWork_OLX.Controllers
         };
 
         private readonly ILogger<WeatherForecastController> _logger;
+        private readonly IRepository<User> users;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger,IRepository<User> users)
         {
             _logger = logger;
+            this.users = users;
         }
 
         [HttpGet(Name = "GetWeatherForecast")]
-        public IEnumerable<WeatherForecast> Get()
+        public async Task< IEnumerable<WeatherForecast>> Get()
         {
+           
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),

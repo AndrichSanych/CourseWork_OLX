@@ -1,5 +1,9 @@
+using DataAccess;
+
 var builder = WebApplication.CreateBuilder(args);
 
+var connStr = builder.Configuration.GetConnectionString("DefaultConnection")!;
+builder.Services.AddOlxDbContext(connStr);
 // Add services to the container.
 
 builder.Services.AddControllers();
