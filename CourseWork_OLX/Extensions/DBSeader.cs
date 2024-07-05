@@ -5,7 +5,7 @@ using BusinessLogic.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using SixLabors.ImageSharp;
 using System.Data;
-using System.Net.Http;
+
 
 namespace CourseWork_OLX.Extensions
 {
@@ -75,8 +75,8 @@ namespace CourseWork_OLX.Extensions
                 foreach (var category in categoryEntities)
                 {
                     var imageUrl = faker.Image.LoremFlickrUrl(keywords: category.Name, width: 1000, height: 800);
-                    var imageBase64 = await GetImageAsBase64Async(httpClient, imageUrl);
-                    category.Image = await imageService.SaveImageAsync(imageBase64);
+                    var imageBytes = await httpClient.GetByteArrayAsync(imageUrl);
+                    category.Image = await imageService.SaveImageAsync(imageBytes);
                 }
 
                 await categories.AddRangeAsync(categoryEntities);
@@ -93,11 +93,6 @@ namespace CourseWork_OLX.Extensions
                 await cities.AddRangeAsync(citiesEntities);
                 await cities.SaveAsync();
             }
-        }
-        private static async Task<string> GetImageAsBase64Async(HttpClient httpClient, string imageUrl)
-        {
-            var imageBytes = await httpClient.GetByteArrayAsync(imageUrl);
-            return Convert.ToBase64String(imageBytes);
         }
     }
 
