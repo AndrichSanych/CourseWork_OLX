@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(OlxDbContext))]
-    [Migration("20240705125116_Initialize")]
+    [Migration("20240705185909_Initialize")]
     partial class Initialize
     {
         /// <inheritdoc />
@@ -77,6 +77,27 @@ namespace DataAccess.Migrations
                     b.ToTable("Advert");
                 });
 
+            modelBuilder.Entity("BusinessLogic.Entities.Area", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Area");
+                });
+
             modelBuilder.Entity("BusinessLogic.Entities.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -111,6 +132,9 @@ namespace DataAccess.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("AreaID")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(256)
@@ -118,8 +142,7 @@ namespace DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Name")
-                        .IsUnique();
+                    b.HasIndex("AreaID");
 
                     b.ToTable("City");
                 });
@@ -438,6 +461,17 @@ namespace DataAccess.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("BusinessLogic.Entities.City", b =>
+                {
+                    b.HasOne("BusinessLogic.Entities.Area", "Area")
+                        .WithMany("Cities")
+                        .HasForeignKey("AreaID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Area");
+                });
+
             modelBuilder.Entity("BusinessLogic.Entities.Image", b =>
                 {
                     b.HasOne("BusinessLogic.Entities.Advert", "Advert")
@@ -535,6 +569,11 @@ namespace DataAccess.Migrations
                     b.Navigation("Images");
 
                     b.Navigation("UserFavouriteAdverts");
+                });
+
+            modelBuilder.Entity("BusinessLogic.Entities.Area", b =>
+                {
+                    b.Navigation("Cities");
                 });
 
             modelBuilder.Entity("BusinessLogic.Entities.Category", b =>

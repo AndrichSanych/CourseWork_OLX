@@ -17,12 +17,13 @@ namespace CourseWork_OLX.Extensions
             using var scope = app.GetRequiredService<IServiceScopeFactory>().CreateScope();
             var userManager = app.GetRequiredService<UserManager<User>>();
             var imageService = scope.ServiceProvider.GetService<IImageService>()
-                ?? throw new NullReferenceException("IImageService"); ;
+                ?? throw new NullReferenceException("IImageService"); 
+
             var users = scope.ServiceProvider.GetService<IRepository<User>>()
                  ?? throw new NullReferenceException("IRepository<User>");
             var categories = scope.ServiceProvider.GetService<IRepository<Category>>()
                 ?? throw new NullReferenceException("IRepository<User>");
-            var cities = scope.ServiceProvider.GetService<IRepository<City>>()
+            var areas = scope.ServiceProvider.GetService<IRepository<Area>>()
                 ?? throw new NullReferenceException("IRepository<User>");
             var adverts = scope.ServiceProvider.GetService<IRepository<Advert>>()
                ?? throw new NullReferenceException("IRepository<User>");
@@ -83,15 +84,30 @@ namespace CourseWork_OLX.Extensions
                 await categories.SaveAsync();
             }
 
-            if (!await cities.AnyAsync())
+            if (!await areas.AnyAsync())
             {
-                var citiesNames = config
-                    .GetSection("Cities")
-                    .Get<string[]>()
-                    ?? throw new Exception("Configuration Cities is invalid");
-                var citiesEntities = citiesNames.Select(name => new City { Name = name }).ToList();
-                await cities.AddRangeAsync(citiesEntities);
-                await cities.SaveAsync();
+                var newPostService = scope.ServiceProvider.GetService<INewPostService>()
+                ?? throw new NullReferenceException("INewPostService");
+
+                var npAreas = await newPostService.GetAreas();
+                var npCites = await newPostService.GetCities();
+                
+
+                var areaEntities = new List<Area>();
+                foreach (var area in npAreas) 
+                {
+                    var areaEntity = new Area() { Name = area.Description };
+                    var cityEntities = npCites.Where(x=>x.Area==area.Ref).Select(x=>new City() { Name = x.Description});
+                    foreach (var city in cityEntities)
+                    {
+                        areaEntity.Cities.Add(city);
+                    }
+                    
+                    areaEntities.Add(areaEntity);
+                }
+
+                await areas.AddRangeAsync(areaEntities);
+                await areas.SaveAsync();
             }
         }
     }
