@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class Initialization : Migration
+    public partial class Initialize : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -33,6 +33,7 @@ namespace DataAccess.Migrations
                     Id = table.Column<string>(type: "text", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Surname = table.Column<string>(type: "text", nullable: false),
+                    Avatar = table.Column<string>(type: "text", nullable: false),
                     Birthdate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -60,6 +61,7 @@ namespace DataAccess.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Image = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
                     Name = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false)
                 },
                 constraints: table =>
@@ -180,6 +182,27 @@ namespace DataAccess.Migrations
                     table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
                     table.ForeignKey(
                         name: "FK_AspNetUserTokens_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RefreshToken",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Token = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    ExpirationDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UserId = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RefreshToken", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RefreshToken_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -341,6 +364,11 @@ namespace DataAccess.Migrations
                 column: "AdvertId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_RefreshToken_UserId",
+                table: "RefreshToken",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserAdvert_AdvertId",
                 table: "UserAdvert",
                 column: "AdvertId");
@@ -371,6 +399,9 @@ namespace DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "Image");
+
+            migrationBuilder.DropTable(
+                name: "RefreshToken");
 
             migrationBuilder.DropTable(
                 name: "UserAdvert");
