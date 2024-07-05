@@ -82,6 +82,11 @@ namespace DataAccess.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(128)
@@ -141,6 +146,33 @@ namespace DataAccess.Migrations
                     b.ToTable("Image");
                 });
 
+            modelBuilder.Entity("BusinessLogic.Entities.RefreshToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshToken");
+                });
+
             modelBuilder.Entity("BusinessLogic.Entities.User", b =>
                 {
                     b.Property<string>("Id")
@@ -148,6 +180,10 @@ namespace DataAccess.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("integer");
+
+                    b.Property<string>("Avatar")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("Birthdate")
                         .HasColumnType("timestamp with time zone");
@@ -410,6 +446,17 @@ namespace DataAccess.Migrations
                     b.Navigation("Advert");
                 });
 
+            modelBuilder.Entity("BusinessLogic.Entities.RefreshToken", b =>
+                {
+                    b.HasOne("BusinessLogic.Entities.User", "User")
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("BusinessLogic.Entities.UserAdvert", b =>
                 {
                     b.HasOne("BusinessLogic.Entities.Advert", "Advert")
@@ -500,6 +547,8 @@ namespace DataAccess.Migrations
             modelBuilder.Entity("BusinessLogic.Entities.User", b =>
                 {
                     b.Navigation("Adverts");
+
+                    b.Navigation("RefreshTokens");
 
                     b.Navigation("UserFavouriteAdverts");
                 });

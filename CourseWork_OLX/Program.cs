@@ -1,3 +1,4 @@
+using BusinessLogic.Exstensions;
 using CourseWork_OLX.Extensions;
 using DataAccess;
 
@@ -5,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 var connStr = builder.Configuration.GetConnectionString("DefaultConnection")!;
 builder.Services.AddOlxDbContext(connStr);
+builder.Services.AddBusinessLogicServices();
 // Add services to the container.
 builder.Services.AddMainServices();
 
@@ -18,9 +20,7 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var serviceProvider = scope.ServiceProvider;
-    serviceProvider.SeedRoles().Wait();
-    serviceProvider.SeedAdmin().Wait();
-    serviceProvider.SeedData().Wait();
+    serviceProvider.SeedData(builder.Configuration).Wait();
 }
 
 // Configure the HTTP request pipeline.

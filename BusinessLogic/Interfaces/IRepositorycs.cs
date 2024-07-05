@@ -10,7 +10,9 @@ namespace BusinessLogic.Interfaces
     public interface IRepository<TEntity> where TEntity : class
     {
         Task<TEntity?> GetByIDAsync(object id);
+        Task<bool> AnyAsync();
         Task InsertAsync(TEntity entity);
+        Task AddRangeAsync(IEnumerable<TEntity> entities);
         void Delete(object id);
         Task DeleteAsync(object id);
         void Delete(TEntity entityToDelete);

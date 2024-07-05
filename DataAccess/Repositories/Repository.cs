@@ -18,8 +18,10 @@ namespace DataAccess.Repositories
         }
 
         public virtual async Task<TEntity?> GetByIDAsync(object id) => await dbSet.FindAsync(id);
-
         public async virtual Task InsertAsync(TEntity entity) => await dbSet.AddAsync(entity);
+        public async virtual Task<bool> AnyAsync() => await dbSet.AnyAsync();
+
+        public async virtual Task AddRangeAsync(IEnumerable<TEntity> entities) => await dbSet.AddRangeAsync(entities);
 
         public virtual void Delete(object id)
         {
