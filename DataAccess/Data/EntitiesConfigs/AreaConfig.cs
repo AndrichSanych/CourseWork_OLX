@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Data.EntitiesConfigs
 {
-    public class CityConfig : IEntityTypeConfiguration<City>
+    internal class AreaConfig : IEntityTypeConfiguration<Area>
     {
-        public void Configure(EntityTypeBuilder<City> builder)
+        public void Configure(EntityTypeBuilder<Area> builder)
         {
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Name).HasMaxLength(256).IsRequired();
-            builder.HasOne(x=>x.Area).WithMany(x=>x.Cities).HasForeignKey(x=>x.AreaID);
+            builder.HasIndex(x => x.Name).IsUnique();
         }
     }
 }
