@@ -91,20 +91,12 @@ namespace CourseWork_OLX.Extensions
 
                 var npAreas = await newPostService.GetAreas();
                 var npCites = await newPostService.GetCities();
-                
 
-                var areaEntities = new List<Area>();
-                foreach (var area in npAreas) 
+                var areaEntities = npAreas.Select(area => new Area()
                 {
-                    var areaEntity = new Area() { Name = area.Description };
-                    var cityEntities = npCites.Where(x=>x.Area==area.Ref).Select(x=>new City() { Name = x.Description});
-                    foreach (var city in cityEntities)
-                    {
-                        areaEntity.Cities.Add(city);
-                    }
-                    
-                    areaEntities.Add(areaEntity);
-                }
+                    Name = area.Description,
+                    Cities = npCites.Where(city => city.Area == area.Ref).Select(z => new City() { Name = z.Description }).ToHashSet()
+                });
 
                 await areas.AddRangeAsync(areaEntities);
                 await areas.SaveAsync();
