@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(OlxDbContext))]
-    [Migration("20240705185909_Initialize")]
+    [Migration("20240707200020_Initialize")]
     partial class Initialize
     {
         /// <inheritdoc />
@@ -132,7 +132,7 @@ namespace DataAccess.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AreaID")
+                    b.Property<int>("AreaId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Name")
@@ -142,7 +142,7 @@ namespace DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AreaID");
+                    b.HasIndex("AreaId");
 
                     b.ToTable("City");
                 });
@@ -465,7 +465,7 @@ namespace DataAccess.Migrations
                 {
                     b.HasOne("BusinessLogic.Entities.Area", "Area")
                         .WithMany("Cities")
-                        .HasForeignKey("AreaID")
+                        .HasForeignKey("AreaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

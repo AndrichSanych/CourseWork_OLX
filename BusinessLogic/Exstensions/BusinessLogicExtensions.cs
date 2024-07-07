@@ -11,6 +11,7 @@ namespace BusinessLogic.Exstensions
         {
             services.AddScoped<IImageService, ImageService>();
             services.AddScoped<INewPostService, NewPostService>();
+            services.AddScoped<ICitiesService, CitiesService>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
     }
