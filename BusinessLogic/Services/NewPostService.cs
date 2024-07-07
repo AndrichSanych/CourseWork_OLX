@@ -90,7 +90,7 @@ namespace BusinessLogic.Services
                     var result = JsonConvert.DeserializeObject<NPSettlementResponseViewModel>(responseData);
                     if (result!=null && result.Data.Count != 0)
                     {
-                        cities.AddRange(result.Data.GroupBy(x => x.Ref).Select(z => z.FirstOrDefault()));
+                        cities.AddRange(result.Data.GroupBy(x =>new { x.Description,x.Area }).Select(z => z.FirstOrDefault()));
                         page++;
                     }
                     else
