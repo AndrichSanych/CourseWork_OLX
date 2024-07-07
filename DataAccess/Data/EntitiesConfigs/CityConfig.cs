@@ -15,7 +15,7 @@ namespace DataAccess.Data.EntitiesConfigs
         {
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Name).HasMaxLength(256).IsRequired();
-            builder.HasOne(x=>x.Area).WithMany(x=>x.Cities).HasForeignKey(x=>x.AreaID);
+            builder.HasOne(x=>x.Area).WithMany(x=>x.Cities).HasForeignKey(x=>x.AreaId);
         }
     }
 }

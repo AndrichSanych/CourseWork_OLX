@@ -20,23 +20,19 @@ namespace DataAccess.Repositories
         public virtual async Task<TEntity?> GetByIDAsync(object id) => await dbSet.FindAsync(id);
         public async virtual Task InsertAsync(TEntity entity) => await dbSet.AddAsync(entity);
         public async virtual Task<bool> AnyAsync() => await dbSet.AnyAsync();
-
         public async virtual Task AddRangeAsync(IEnumerable<TEntity> entities) => await dbSet.AddRangeAsync(entities);
-
         public virtual void Delete(object id)
         {
             TEntity? entityToDelete = dbSet.Find(id);
             if (entityToDelete != null)
                 Delete(entityToDelete);
         }
-
         public async virtual Task DeleteAsync(object id)
         {
             TEntity? entityToDelete = await dbSet.FindAsync(id);
             if (entityToDelete != null)
                 Delete(entityToDelete);
         }
-
         public virtual void Delete(TEntity entityToDelete)
         {
             if (context.Entry(entityToDelete).State == EntityState.Detached)
@@ -45,27 +41,20 @@ namespace DataAccess.Repositories
             }
             dbSet.Remove(entityToDelete);
         }
-
         public virtual void Update(TEntity entityToUpdate)
         {
             dbSet.Attach(entityToUpdate);
             context.Entry(entityToUpdate).State = EntityState.Modified;
         }
-
-
-
         public async Task SaveAsync() => await context.SaveChangesAsync();
-
         public async Task<IEnumerable<TEntity>> GetListBySpec(ISpecification<TEntity> specification)
         {
             return await ApplySpecification(specification).ToListAsync();
         }
-
         public async Task<TEntity?> GetItemBySpec(ISpecification<TEntity> specification)
         {
             return await ApplySpecification(specification).FirstOrDefaultAsync();
         }
-
         private IQueryable<TEntity> ApplySpecification(ISpecification<TEntity> specification)
         {
             var evaluator = new SpecificationEvaluator();

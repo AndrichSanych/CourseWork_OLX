@@ -88,15 +88,15 @@ namespace DataAccess.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    AreaID = table.Column<int>(type: "integer", nullable: false),
+                    AreaId = table.Column<int>(type: "integer", nullable: false),
                     Name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_City", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_City_Area_AreaID",
-                        column: x => x.AreaID,
+                        name: "FK_City_Area_AreaId",
+                        column: x => x.AreaId,
                         principalTable: "Area",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -379,9 +379,9 @@ namespace DataAccess.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_City_AreaID",
+                name: "IX_City_AreaId",
                 table: "City",
-                column: "AreaID");
+                column: "AreaId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Image_AdvertId",
