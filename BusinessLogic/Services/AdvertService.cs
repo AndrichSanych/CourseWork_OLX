@@ -3,9 +3,9 @@ using BusinessLogic.DTOs;
 using BusinessLogic.Entities;
 using BusinessLogic.Exceptions;
 using BusinessLogic.Interfaces;
-using BusinessLogic.Models;
 using BusinessLogic.Models.AdvertModels;
 using BusinessLogic.Specifications;
+using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using System.Net;
 
@@ -17,19 +17,24 @@ namespace BusinessLogic.Services
         private readonly IRepository<Advert> adverts;
         private readonly IImageService imageService;
         private readonly UserManager<User> userManager;
+        private readonly IValidator<AdvertCreationModel> validator;
 
         public AdvertService(IMapper mapper,
             IRepository<Advert> adverts,
             IImageService imageService,
-            UserManager<User> userManager)
+            UserManager<User> userManager,
+            IValidator<AdvertCreationModel> validator)
         {
             this.mapper = mapper;
             this.adverts = adverts;
             this.imageService = imageService;
+            this.userManager = userManager;
+            this.validator = validator;
         }
         public async Task CreateAsync(AdvertCreationModel advertModel)  
         {
-            if((await userManager.FindByIdAsync(advertModel.UserId))== null)
+            await validator.ValidateAndThrowAsync(advertModel);
+            if ((await userManager.FindByIdAsync(advertModel.UserId))== null)
                  throw new HttpException("Invalid user ID", HttpStatusCode.BadRequest);
 
             var advert = mapper.Map<Advert>(advertModel);

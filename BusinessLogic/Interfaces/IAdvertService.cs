@@ -1,5 +1,4 @@
 ﻿using BusinessLogic.DTOs;
-using BusinessLogic.Models;
 using BusinessLogic.Models.AdvertModels;
 
 

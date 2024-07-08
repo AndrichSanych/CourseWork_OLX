@@ -95,7 +95,7 @@ namespace BusinessLogic.Services
                 }
                 else
                 {
-                    throw new HttpException("Error NewPost service", HttpStatusCode.InternalServerError);ss
+                    throw new HttpException("Error NewPost service", HttpStatusCode.InternalServerError);
                 }
             }
 
