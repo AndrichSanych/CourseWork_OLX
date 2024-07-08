@@ -1,16 +1,11 @@
-﻿using AutoMapper;
-using BusinessLogic.Interfaces;
+﻿using BusinessLogic.Interfaces;
+using BusinessLogic.Exceptions;
 using BusinessLogic.Models.NewPostModels;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using SixLabors.ImageSharp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
 using System.Text;
-using System.Threading.Tasks;
+using System.Net;
 using static BusinessLogic.Models.NewPostModels.NPSettlementResponseViewModel;
 
 namespace BusinessLogic.Services
@@ -60,7 +55,7 @@ namespace BusinessLogic.Services
             }
             else
             {
-                throw new Exception("Error NewPost service");
+                throw new HttpException( "Error NewPost service", HttpStatusCode.InternalServerError);
             }
         }
 
@@ -90,7 +85,7 @@ namespace BusinessLogic.Services
                     var result = JsonConvert.DeserializeObject<NPSettlementResponseViewModel>(responseData);
                     if (result!=null && result.Data.Count != 0)
                     {
-                        cities.AddRange(result.Data.GroupBy(x =>new { x.Description,x.Area }).Select(z => z.FirstOrDefault()));
+                        cities.AddRange(result.Data.GroupBy(x => new { x.Description,x.Area }).Select(z => z.FirstOrDefault()));
                         page++;
                     }
                     else
@@ -100,7 +95,7 @@ namespace BusinessLogic.Services
                 }
                 else
                 {
-                    Console.WriteLine($"Error novaposhta: {response.StatusCode}");
+                    throw new HttpException("Error NewPost service", HttpStatusCode.InternalServerError);ss
                 }
             }
 

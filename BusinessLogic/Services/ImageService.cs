@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BusinessLogic.Exceptions;
 using BusinessLogic.Interfaces;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Webp;
 using SixLabors.ImageSharp.Processing;
+using System.Net;
 using EntityImage = BusinessLogic.Entities.Image;
 
 namespace BusinessLogic.Services
@@ -50,7 +52,7 @@ namespace BusinessLogic.Services
             catch (Exception)
             {
                 result.ForEach(DeleteImageIfExists);
-                throw;
+                throw new HttpException("Error image save", HttpStatusCode.InternalServerError);
             }
 
             return result;
@@ -121,7 +123,7 @@ namespace BusinessLogic.Services
             catch (Exception)
             {
                 result.ForEach(DeleteImageIfExists);
-                throw;
+                throw new HttpException("Error image save", HttpStatusCode.InternalServerError);
             }
 
             return result;
