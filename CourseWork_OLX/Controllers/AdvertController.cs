@@ -26,7 +26,6 @@ namespace CourseWork_OLX.Controllers
         [HttpGet("get")]
         public async Task<IActionResult> GetByUserEmail([FromQuery] string email) => Ok(await advertService.GetByUserEmailAsync(email));
 
-
         [HttpPost("create")]
         public async Task<IActionResult> Create([FromForm] AdvertCreationModel adverModel)
         {
