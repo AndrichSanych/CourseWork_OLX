@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
 using BusinessLogic.DTOs;
 using BusinessLogic.Entities;
+using BusinessLogic.Exceptions;
 using BusinessLogic.Interfaces;
 using BusinessLogic.Specifications;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -23,10 +25,12 @@ namespace BusinessLogic.Services
         }
         public async Task<IEnumerable<CityDto>> GetAllAsync() => mapper.Map<IEnumerable<CityDto>>(await cities.GetListBySpec(new CitySpecs.GetAll()));
 
-        public async Task<IEnumerable<CityDto>> GetByAreaIdAsync(int id) => mapper.Map<IEnumerable<CityDto>>(await cities.GetListBySpec(new CitySpecs.GetByAreaId(id)));
+        public async Task<IEnumerable<CityDto>> GetByAreaIdAsync(int id) => mapper.Map<IEnumerable<CityDto>>(await cities.GetListBySpec(new CitySpecs.GetByAreaId(id))) 
+            ?? throw new HttpException("Invalid area ID", HttpStatusCode.BadRequest);
         
 
-        public async Task<CityDto> GetByIdAsync(int id) => mapper.Map<CityDto>(await cities.GetByIDAsync(id));
+        public async Task<CityDto> GetByIdAsync(int id) => mapper.Map<CityDto>(await cities.GetByIDAsync(id))
+             ?? throw new HttpException("Invalid city ID", HttpStatusCode.BadRequest);
         
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BusinessLogic.Exceptions;
 using BusinessLogic.Interfaces;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Webp;
 using SixLabors.ImageSharp.Processing;
+using System.Net;
 using EntityImage = BusinessLogic.Entities.Image;
 
 namespace BusinessLogic.Services
@@ -50,7 +52,7 @@ namespace BusinessLogic.Services
             catch (Exception)
             {
                 result.ForEach(DeleteImageIfExists);
-                throw;
+                throw new HttpException("Error image save", HttpStatusCode.InternalServerError);
             }
 
             return result;
@@ -121,7 +123,7 @@ namespace BusinessLogic.Services
             catch (Exception)
             {
                 result.ForEach(DeleteImageIfExists);
-                throw;
+                throw new HttpException("Error image save", HttpStatusCode.InternalServerError);
             }
 
             return result;
@@ -151,9 +153,10 @@ namespace BusinessLogic.Services
         {
             foreach (var size in Sizes)
             {
-                if (File.Exists(Path.Combine(imgPath, $"{size}_{nameWithFormat}")))
+                var path = Path.Combine(imgPath, $"{size}_{nameWithFormat}");
+                if (File.Exists(path))
                 {
-                    File.Delete(Path.Combine(imgPath, $"{size}_{nameWithFormat}"));
+                    File.Delete(path);
                 }
             }
         }
@@ -169,11 +172,10 @@ namespace BusinessLogic.Services
             get
             {
                 List<int> sizes = config.GetRequiredSection("ImageSizes").Get<List<int>>()
-                ?? throw new Exception("ImageSizes reading error");
+                ?? throw new HttpException("ImageSizes reading error",HttpStatusCode.InternalServerError);
 
                 if (sizes.Count == 0)
-                    throw new Exception("ImageSizes not inicialized");
-
+                    throw new HttpException("ImageSizes not inicialized",HttpStatusCode.InternalServerError);
                 return sizes;
             }
         }
