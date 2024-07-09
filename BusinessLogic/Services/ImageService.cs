@@ -153,9 +153,10 @@ namespace BusinessLogic.Services
         {
             foreach (var size in Sizes)
             {
-                if (File.Exists(Path.Combine(imgPath, $"{size}_{nameWithFormat}")))
+                var path = Path.Combine(imgPath, $"{size}_{nameWithFormat}");
+                if (File.Exists(path))
                 {
-                    File.Delete(Path.Combine(imgPath, $"{size}_{nameWithFormat}"));
+                    File.Delete(path);
                 }
             }
         }
@@ -171,11 +172,10 @@ namespace BusinessLogic.Services
             get
             {
                 List<int> sizes = config.GetRequiredSection("ImageSizes").Get<List<int>>()
-                ?? throw new Exception("ImageSizes reading error");
+                ?? throw new HttpException("ImageSizes reading error",HttpStatusCode.InternalServerError);
 
                 if (sizes.Count == 0)
-                    throw new Exception("ImageSizes not inicialized");
-
+                    throw new HttpException("ImageSizes not inicialized",HttpStatusCode.InternalServerError);
                 return sizes;
             }
         }

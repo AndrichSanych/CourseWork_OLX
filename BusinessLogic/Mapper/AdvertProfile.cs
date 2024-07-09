@@ -15,6 +15,8 @@ namespace BusinessLogic.Mapper
                 .ForMember(x=>x.CityName,opt=>opt.MapFrom(x=>x.City.Name));
             CreateMap<AdvertDto, Advert>();
             CreateMap<AdvertCreationModel, Advert>();
+            CreateMap<AdvertUpdateModel, Advert>()
+                .ForMember(x=>x.Images,opt=>opt.Ignore());
         }
     }
 }

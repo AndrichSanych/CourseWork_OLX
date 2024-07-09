@@ -17,5 +17,25 @@ namespace BusinessLogic.Specifications
                 .Include(x=>x.Category)
                 .Include(x=>x.City);
         }
+
+        public class GetById : Specification<Advert>
+        {
+            public GetById(int id) => Query.Where(x => x.Id == id)
+                .Include(x => x.Category)
+                .Include(x => x.City);
+        }
+
+        public class GetByIdWithImage : Specification<Advert>
+        {
+            public GetByIdWithImage(int id) => Query.Where(x => x.Id == id)
+                .Include(x => x.Images);
+        }
+
+        public class GetByIdUserId : Specification<Advert>
+        {
+            public GetByIdUserId(string userId) => Query.Where(x => x.UserId == userId)
+                .Include(x => x.Category)
+                .Include(x => x.City);
+        }
     }
 }
