@@ -20,7 +20,6 @@ namespace BusinessLogic.Interfaces
     {
         Task<IEnumerable<Claim>> GetClaimsAsync(User user);
         string CreateToken(IEnumerable<Claim> claims);
-      
-        IEnumerable<Claim> GetClaimsFromExpiredToken(string token);
+         
     }
 }

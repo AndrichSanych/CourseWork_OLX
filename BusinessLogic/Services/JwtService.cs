@@ -59,33 +59,6 @@ namespace BusinessLogic.Services
                 signingCredentials: credentials);
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
-
-        
-        public IEnumerable<Claim> GetClaimsFromExpiredToken(string token)
-        {
-            var tokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuer = true,
-                ValidateAudience = false,
-                ValidateLifetime = false,
-                ValidateIssuerSigningKey = true,
-                ValidIssuer = jwtOpts.Issuer,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOpts.Key)),
-            };
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-
-            tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
-
-            if (securityToken is not JwtSecurityToken jwtSecurityToken ||
-                !jwtSecurityToken.Header.Alg
-                    .Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
-            {
-                throw new HttpException("Invalid token", HttpStatusCode.BadRequest);
-            }
-
-            return jwtSecurityToken.Claims;
-        }
-        
+       
     }
 }
