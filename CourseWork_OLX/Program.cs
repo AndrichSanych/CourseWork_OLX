@@ -10,7 +10,7 @@ var connStr = builder.Configuration.GetConnectionString("DefaultConnection")!;
 builder.Services.AddOlxDbContext(connStr);
 builder.Services.AddBusinessLogicServices();
 // Add services to the container.
-builder.Services.AddMainServices();
+builder.Services.AddMainServices(builder.Configuration);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -37,6 +37,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
