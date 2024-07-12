@@ -19,7 +19,9 @@ namespace BusinessLogic.Exstensions
             services.AddScoped<INewPostService, NewPostService>();
             services.AddScoped<ICitiesService, CitiesService>();
             services.AddScoped<IAdvertService, AdvertService>();
-           
+            services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IJwtService, JWTService>();
+
         }
     }
 }

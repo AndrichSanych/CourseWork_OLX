@@ -1,10 +1,13 @@
 ﻿using BusinessLogic.Interfaces;
 using BusinessLogic.Models.AdvertModels;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CourseWork_OLX.Controllers
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/[controller]")]
     [ApiController]
     public class AdvertController : ControllerBase
@@ -16,13 +19,15 @@ namespace CourseWork_OLX.Controllers
             this.advertService = advertService;
         }
 
-
+        [AllowAnonymous]
         [HttpGet("adverts")]
         public async Task<IActionResult> GetAll() => Ok(await advertService.GetAllAsync());
 
+        [AllowAnonymous]
         [HttpGet("get/{id:int}")]
         public async Task<IActionResult> GetById([FromRoute] int id) => Ok(await advertService.GetByIdAsync(id));
 
+        [AllowAnonymous]
         [HttpGet("get")]
         public async Task<IActionResult> GetByUserEmail([FromQuery] string email) => Ok(await advertService.GetByUserEmailAsync(email));
 
