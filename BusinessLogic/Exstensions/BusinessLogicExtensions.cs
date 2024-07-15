@@ -21,6 +21,8 @@ namespace BusinessLogic.Exstensions
             services.AddScoped<IAdvertService, AdvertService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IJwtService, JWTService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+
 
         }
     }
