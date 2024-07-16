@@ -18,7 +18,7 @@ namespace CourseWork_OLX.Extensions
                 {
                     builder.AllowAnyOrigin()
                            .AllowAnyHeader()
-                    .AllowAnyMethod();
+                           .AllowAnyMethod();
                 });
             });
 

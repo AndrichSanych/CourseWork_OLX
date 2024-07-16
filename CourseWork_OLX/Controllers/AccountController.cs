@@ -10,6 +10,7 @@ namespace CourseWork_OLX.Controllers
     public class  AccountsController(IAccountService accountsService) : ControllerBase
     {
         private readonly IAccountService accountsService = accountsService;
+
         [HttpPost("user/register")]
         public async Task<IActionResult> UserRegister([FromForm] RegisterUserModel model)
         {
