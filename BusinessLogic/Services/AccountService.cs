@@ -60,7 +60,7 @@ namespace BusinessLogic.Services
 
             var user = mapper.Map<User>(model);
             if(model.AvatarFile != null)
-               user.Avatar =await imageService.SaveImageAsync(model.AvatarFile);
+               user.Avatar = await imageService.SaveImageAsync(model.AvatarFile);
             var result = await userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
                 throw new HttpException(string.Join(" ", result.Errors.Select(x => x.Description)), HttpStatusCode.BadRequest);

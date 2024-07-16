@@ -11,6 +11,6 @@ namespace BusinessLogic.Models.AccountModels
         public string Password { get; set; } = string.Empty;
         public string? PhoneNumber { get; set; }
         public DateTime Birthdate { get; set; }
-        public FormFile AvatarFile { get; set; }
+        public IFormFile? AvatarFile { get; set; }
     }
 }
