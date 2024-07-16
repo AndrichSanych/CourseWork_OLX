@@ -17,16 +17,19 @@ namespace BusinessLogic.Services
         private readonly IMapper mapper;
         private readonly IValidator<RegisterUserModel> registerValidator;
         private readonly IJwtService jwtService;
+        private readonly IImageService imageService;
+
         public AccountService(UserManager<User> userManager,
                                 IMapper mapper,
                                 IValidator<RegisterUserModel> registerValidator,
-                                IJwtService jwtService)
+                                IJwtService jwtService,
+                                IImageService imageService)
         {
             this.userManager = userManager;
             this.mapper = mapper;
             this.registerValidator = registerValidator;
             this.jwtService = jwtService;
-            
+            this.imageService = imageService;
         }
 
         private async Task<string> UpdateAccessTokensAsync(User user)
@@ -56,6 +59,8 @@ namespace BusinessLogic.Services
                 throw new HttpException("This email allready exist", HttpStatusCode.BadRequest);
 
             var user = mapper.Map<User>(model);
+            if(model.AvatarFile != null)
+               user.Avatar =await imageService.SaveImageAsync(model.AvatarFile);
             var result = await userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
                 throw new HttpException(string.Join(" ", result.Errors.Select(x => x.Description)), HttpStatusCode.BadRequest);
