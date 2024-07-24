@@ -23,6 +23,8 @@ namespace BusinessLogic.DTOs
 
         public bool IsVip { get; set; }
 
+        public bool IsContractPrice { get; set; }
+
         public decimal Price { get; set; }
     }
 }
