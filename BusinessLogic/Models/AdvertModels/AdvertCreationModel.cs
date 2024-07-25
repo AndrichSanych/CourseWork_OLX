@@ -17,7 +17,6 @@ namespace BusinessLogic.Models.AdvertModels
         public bool IsNew { get; set; }
         public bool IsVip { get; set; }
         public decimal Price { get; set; }
-        public DateTime Date { get; set; }
         public List<IFormFile> ImageFiles { get; set; } = [];
     }
 }

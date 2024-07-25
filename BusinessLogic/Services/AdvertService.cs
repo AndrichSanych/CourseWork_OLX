@@ -45,6 +45,7 @@ namespace BusinessLogic.Services
                  throw new HttpException("Invalid user ID", HttpStatusCode.BadRequest);
 
             var advert = mapper.Map<Advert>(advertModel);
+            advert.Date = DateTime.Now;
             for (int i = 0;i < advertModel.ImageFiles.Count; i++)
             {
                 advert.Images.Add(new Image()

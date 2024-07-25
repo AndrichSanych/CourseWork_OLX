@@ -35,10 +35,6 @@ namespace BusinessLogic.Validators
             RuleFor(x => x.ImageFiles)
                 .NotNull().WithMessage("ImageFiles must not be null")
                 .NotEmpty().WithMessage("Image files not be empty");
-            RuleFor(x=>x.Date)
-                .NotNull().WithMessage("Date must not be null")
-                .NotEmpty().WithMessage("Date must not be empty")
-                .LessThan(DateTime.Now).WithMessage("Invalid date");
             RuleFor(x => x.IsNew)
                  .NotNull().WithMessage("IsNew must not be null");
             RuleFor(x => x.IsVip)
