@@ -6,6 +6,9 @@ using DataAccess;
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 var builder = WebApplication.CreateBuilder(args);
 
+//builder.Logging.ClearProviders();
+//builder.Logging.AddConsole();
+
 var connStr = builder.Configuration.GetConnectionString("DefaultConnection")!;
 builder.Services.AddOlxDbContext(connStr);
 builder.Services.AddBusinessLogicServices();
@@ -16,8 +19,11 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddCors();
 
 var app = builder.Build();
+
+app.UseCors("AllowOrigins");
 
 using (var scope = app.Services.CreateScope())
 {
@@ -33,8 +39,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-app.UseCors("AllowOrigins");
 
 app.UseStaticFiles();
 
