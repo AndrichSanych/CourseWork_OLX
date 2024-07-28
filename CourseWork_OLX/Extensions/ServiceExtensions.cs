@@ -4,6 +4,9 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using BusinessLogic.Helpers;
 using System.Text;
+using Microsoft.Extensions.Options;
+
+
 
 namespace CourseWork_OLX.Extensions
 {
@@ -11,22 +14,14 @@ namespace CourseWork_OLX.Extensions
     {
         public static void AddMainServices(this IServiceCollection services,IConfiguration configuration) 
         {
-            services.AddCors(options =>
-            {
-                options.AddPolicy("AllowOrigins",
-                builder =>
-                {
-                    builder.AllowAnyOrigin()
-                           .AllowAnyHeader()
-                           .AllowAnyMethod();
-                });
-            });
-
             var jwtOpts = configuration.GetSection(nameof(JwtOptions)).Get<JwtOptions>()!;
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(o =>
                 {
+                    o.RequireHttpsMetadata = false;
+                    o.IncludeErrorDetails = true;
+                    o.UseSecurityTokenValidators = true;
                     o.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
@@ -37,14 +32,18 @@ namespace CourseWork_OLX.Extensions
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOpts.Key)),
                         ClockSkew = TimeSpan.Zero,
                         SaveSigninToken = true,
-                    };
+                        
+                };
                 });
 
-            services.AddAuthorization(opts => {
+            services.AddAuthorization(opts =>
+            {
 
                 opts.DefaultPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
                       .RequireAuthenticatedUser().Build();
             });
+
+            
 
             services.AddSwaggerGen(setup =>
             {
@@ -71,7 +70,17 @@ namespace CourseWork_OLX.Extensions
                 {
                     { jwtSecurityScheme, Array.Empty<string>() }
                 });
+            });
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowOrigins",
+                builder =>
+                {
+                    builder.AllowAnyOrigin()
+                           .AllowAnyHeader()
+                           .AllowAnyMethod();
+                });
             });
         }
     }

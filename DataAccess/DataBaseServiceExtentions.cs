@@ -19,8 +19,8 @@ namespace DataAccess
         {
             services.AddDbContext<OlxDbContext>(opts =>
                 opts.UseNpgsql(connectionString));
-            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
 
             services.AddIdentity<User, IdentityRole>(options =>

@@ -31,6 +31,7 @@ namespace CourseWork_OLX.Controllers
         [HttpGet("get")]
         public async Task<IActionResult> GetByUserEmail([FromQuery] string email) => Ok(await advertService.GetByUserEmailAsync(email));
 
+        [Authorize(Roles = "User")]
         [HttpPost("create")]
         public async Task<IActionResult> Create([FromForm] AdvertCreationModel adverModel)
         {
@@ -38,6 +39,7 @@ namespace CourseWork_OLX.Controllers
             return Ok();
         }
 
+        [Authorize(Roles = "User")]
         [HttpPut("update")]
         public async Task<IActionResult> Update([FromForm] AdvertUpdateModel model)
         {
@@ -45,7 +47,9 @@ namespace CourseWork_OLX.Controllers
             return Ok();
         }
 
-        [HttpDelete("delete/{Id:int}")]
+
+        [Authorize(Roles = "User")]
+        [HttpDelete("delete/{Id:int}") ]
         public async Task<IActionResult> DeleteFeedback([FromRoute] int Id)
         {
             await advertService.DeleteAsync(Id);
