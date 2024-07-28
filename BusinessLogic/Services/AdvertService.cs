@@ -38,6 +38,13 @@ namespace BusinessLogic.Services
             this.advertCreationModelValidator = validator;
             this.advertUpdateModelValidator = updateValidator;
         }
+
+        private async Task<Advert> getWithImage(int id) 
+        {
+            return  await adverts.GetItemBySpec(new AdvertSpecs.GetByIdWithImage(id)) ??
+                throw new HttpException("Invalid advert id", HttpStatusCode.BadRequest);
+        }
+
         public async Task CreateAsync(AdvertCreationModel advertModel)  
         {
             await advertCreationModelValidator.ValidateAndThrowAsync(advertModel);
@@ -69,8 +76,7 @@ namespace BusinessLogic.Services
         }
         public async Task DeleteAsync(int id)
         {
-            var advert = await adverts.GetItemBySpec(new AdvertSpecs.GetByIdWithImage(id)) ??
-                throw new HttpException("Invalid advert id",HttpStatusCode.BadRequest);
+            var advert = await getWithImage(id);
             adverts.Delete(advert);
             await adverts.SaveAsync();
             imageService.DeleteImages(advert.Images.Select(x=>x.Name));
@@ -85,6 +91,15 @@ namespace BusinessLogic.Services
             var user = await userManager.FindByEmailAsync(userEmail) 
                 ?? throw new HttpException("Invalid user email",HttpStatusCode.BadRequest);
             return mapper.Map<IEnumerable<AdvertDto>>(await adverts.GetListBySpec(new AdvertSpecs.GetByIdUserId(user.Id)));
+        }
+
+        public async Task<IEnumerable<AdvertDto>> GetVIPAsync(int count) => mapper.Map<IEnumerable<AdvertDto>>(await adverts.GetListBySpec(new AdvertSpecs.GetVIP(count)));
+
+
+        public async Task<IEnumerable<ImageDto>> GetImagesAsync(int id)
+        {
+            var advert = await getWithImage(id);
+            return mapper.Map<IEnumerable<ImageDto>>(advert.Images);
         }
 
         public async Task UpdateAsync(AdvertUpdateModel advertModel)
@@ -117,5 +132,7 @@ namespace BusinessLogic.Services
             }
             
         }
+
+        
     }
 }

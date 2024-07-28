@@ -1,11 +1,6 @@
 ﻿using Ardalis.Specification;
 using BusinessLogic.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+
 
 namespace BusinessLogic.Specifications
 {
@@ -14,6 +9,11 @@ namespace BusinessLogic.Specifications
         public class GetByAdvertId : Specification<Image>
         {
             public GetByAdvertId(int id) => Query.Where(x => x.AdvertId == id);
+        }
+
+        public class GetFirstByAdvertIds : Specification<Image>
+        {
+            public GetFirstByAdvertIds(IEnumerable<int> ids) => Query.Where(x => ids.Any(z=>z==x.AdvertId && x.Priority == 0));
         }
     }
 }

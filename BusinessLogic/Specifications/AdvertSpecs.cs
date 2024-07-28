@@ -15,14 +15,26 @@ namespace BusinessLogic.Specifications
         {
             public GetAll() => Query.Where(x => true)
                 .Include(x=>x.Category)
-                .Include(x=>x.City);
+                .Include(x=>x.City)
+                .Include(x=>x.Images);
+        }
+
+        public class GetVIP : Specification<Advert>
+        {
+            public GetVIP(int count) => Query.Where(x => x.IsVip)
+                .Include(x => x.Category)
+                .Include(x => x.City)
+                .Include(x => x.Images)
+                .OrderBy(x=> Guid.NewGuid())
+                .Take(count);
         }
 
         public class GetById : Specification<Advert>
         {
             public GetById(int id) => Query.Where(x => x.Id == id)
                 .Include(x => x.Category)
-                .Include(x => x.City);
+                .Include(x => x.City)
+                .Include(x => x.Images);
         }
 
         public class GetByIdWithImage : Specification<Advert>
@@ -35,7 +47,8 @@ namespace BusinessLogic.Specifications
         {
             public GetByIdUserId(string userId) => Query.Where(x => x.UserId == userId)
                 .Include(x => x.Category)
-                .Include(x => x.City);
+                .Include(x => x.City)
+                .Include(x => x.Images);
         }
     }
 }

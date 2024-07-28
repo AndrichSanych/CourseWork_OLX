@@ -11,8 +11,10 @@ namespace BusinessLogic.Mapper
         public AdvertProfile() 
         {
             CreateMap<Advert, AdvertDto>()
-                .ForMember(x=>x.CategoryName,opt=>opt.MapFrom(x=>x.Category.Name))
-                .ForMember(x=>x.CityName,opt=>opt.MapFrom(x=>x.City.Name));
+                .ForMember(x => x.CategoryName, opt => opt.MapFrom(x => x.Category.Name))
+                .ForMember(x => x.CityName, opt => opt.MapFrom(x => x.City.Name))
+                .ForMember(x => x.FirstImage, opt => opt.MapFrom(x => x.Images.First()));
+                
             CreateMap<AdvertDto, Advert>();
             CreateMap<AdvertCreationModel, Advert>();
             CreateMap<AdvertUpdateModel, Advert>()

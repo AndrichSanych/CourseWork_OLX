@@ -26,5 +26,7 @@ namespace BusinessLogic.DTOs
         public bool IsContractPrice { get; set; }
 
         public decimal Price { get; set; }
+
+        public string FirstImage { get; set; } = string.Empty;
     }
 }
