@@ -6,9 +6,6 @@ using DataAccess;
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 var builder = WebApplication.CreateBuilder(args);
 
-//builder.Logging.ClearProviders();
-//builder.Logging.AddConsole();
-
 var connStr = builder.Configuration.GetConnectionString("DefaultConnection")!;
 builder.Services.AddOlxDbContext(connStr);
 builder.Services.AddBusinessLogicServices();
