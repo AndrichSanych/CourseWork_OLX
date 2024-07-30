@@ -31,6 +31,16 @@ namespace CourseWork_OLX.Controllers
         [HttpGet("get")]
         public async Task<IActionResult> GetByUserEmail([FromQuery] string email) => Ok(await advertService.GetByUserEmailAsync(email));
 
+        
+        [AllowAnonymous]
+        [HttpGet("images/{id:int}")]
+        public async Task<IActionResult> GetAdvertImages([FromRoute] int id) => Ok(await advertService.GetImagesAsync(id));
+
+        [AllowAnonymous]
+        [HttpGet("vip/{count:int}")]
+        public async Task<IActionResult> GetVipAdverts([FromRoute] int count) => Ok(await advertService.GetVIPAsync(count));
+
+
         [Authorize(Roles = "User")]
         [HttpPost("create")]
         public async Task<IActionResult> Create([FromForm] AdvertCreationModel adverModel)

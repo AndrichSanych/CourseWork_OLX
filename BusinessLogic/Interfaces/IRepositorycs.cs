@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,6 +12,7 @@ namespace BusinessLogic.Interfaces
     {
         Task<TEntity?> GetByIDAsync(object id);
         Task<bool> AnyAsync();
+        Task<bool> AnyAsync(Expression<Func<TEntity, bool>> exp);
         Task InsertAsync(TEntity entity);
         Task AddRangeAsync(IEnumerable<TEntity> entities);
         void Delete(object id);
