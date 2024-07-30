@@ -13,7 +13,8 @@ namespace BusinessLogic.Mapper
             _ = CreateMap<Advert, AdvertDto>()
                 .ForMember(x => x.CategoryName, opt => opt.MapFrom(x => x.Category.Name))
                 .ForMember(x => x.CityName, opt => opt.MapFrom(x => x.City.Name))
-                .ForMember(x => x.FirstImage, opt => opt.MapFrom(x => x.Images.FirstOrDefault(x => x.Priority == 0).Name ?? "Error first image"));
+                .ForMember(x => x.FirstImage, opt => opt.MapFrom(x => x.Images.FirstOrDefault(x => x.Priority == 0).Name ?? "Error first image"))
+                .ForMember(x => x.UserFavorites, opt => opt.MapFrom(x => x.UserFavouriteAdverts.Select(x => x.UserId)));
                 
             CreateMap<AdvertDto, Advert>();
             CreateMap<AdvertCreationModel, Advert>();

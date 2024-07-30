@@ -3,6 +3,8 @@ using Ardalis.Specification;
 using Microsoft.EntityFrameworkCore;
 using BusinessLogic.Interfaces;
 using DataAccess.Data;
+using AutoMapper.QueryableExtensions;
+using System.Linq.Expressions;
 
 namespace DataAccess.Repositories
 {
@@ -17,6 +19,7 @@ namespace DataAccess.Repositories
             this.dbSet = context.Set<TEntity>();
         }
 
+        public virtual async Task<bool> AnyAsync(Expression<Func<TEntity,bool>> exp) => await dbSet.AnyAsync(exp);
         public virtual async Task<TEntity?> GetByIDAsync(object id) => await dbSet.FindAsync(id);
         public async virtual Task InsertAsync(TEntity entity) => await dbSet.AddAsync(entity);
         public async virtual Task<bool> AnyAsync() => await dbSet.AnyAsync();

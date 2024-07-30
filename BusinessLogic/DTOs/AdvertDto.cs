@@ -3,6 +3,7 @@ namespace BusinessLogic.DTOs
 {
     public class AdvertDto
     {
+        public int Id { get; set; }
         public string UserId { get; set; } = string.Empty;
 
         public int CityId { get; set; }
@@ -28,5 +29,7 @@ namespace BusinessLogic.DTOs
         public decimal Price { get; set; }
 
         public string FirstImage { get; set; } = string.Empty;
+
+        public IEnumerable<string> UserFavorites { get; set; } = [];
     }
 }

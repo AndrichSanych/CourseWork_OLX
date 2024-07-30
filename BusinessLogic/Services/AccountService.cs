@@ -4,9 +4,11 @@ using BusinessLogic.Exceptions;
 using BusinessLogic.Helpers;
 using BusinessLogic.Interfaces;
 using BusinessLogic.Models.AccountModels;
+using BusinessLogic.Specifications;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using System.Net;
+using System.Security.Claims;
 
 
 namespace BusinessLogic.Services
@@ -18,18 +20,24 @@ namespace BusinessLogic.Services
         private readonly IValidator<RegisterUserModel> registerValidator;
         private readonly IJwtService jwtService;
         private readonly IImageService imageService;
+        private readonly IRepository<Advert> adverts;
+        private readonly IRepository<UserAdvert> userAdverts;
 
         public AccountService(UserManager<User> userManager,
                                 IMapper mapper,
                                 IValidator<RegisterUserModel> registerValidator,
                                 IJwtService jwtService,
-                                IImageService imageService)
+                                IImageService imageService,
+                                IRepository<Advert> adverts,
+                                IRepository<UserAdvert> userAdverts)
         {
             this.userManager = userManager;
             this.mapper = mapper;
             this.registerValidator = registerValidator;
             this.jwtService = jwtService;
             this.imageService = imageService;
+            this.adverts = adverts;
+            this.userAdverts = userAdverts;
         }
 
         private async Task<string> UpdateAccessTokensAsync(User user)
@@ -65,6 +73,21 @@ namespace BusinessLogic.Services
             if (!result.Succeeded)
                 throw new HttpException(string.Join(" ", result.Errors.Select(x => x.Description)), HttpStatusCode.BadRequest);
             await userManager.AddToRoleAsync(user, Roles.User);
+        }
+
+        public async Task ToggleFavoriteAdvert(int advertId, ClaimsPrincipal user)
+        {
+            var currentUser = await userManager.GetUserAsync(user) 
+                ?? throw new HttpException("Invalid user", HttpStatusCode.InternalServerError);
+            
+            var advert  = await adverts.GetByIDAsync(advertId) 
+                ?? throw new HttpException("Invalid advert id", HttpStatusCode.BadRequest);
+            var userAdvert = await userAdverts.GetItemBySpec(new UserAdvertSpecs.GetByUserIdAdvertId(advert.Id,currentUser.Id));
+            if (userAdvert != null)
+                await userAdverts.DeleteAsync(userAdvert.Id);
+            else
+               await userAdverts.InsertAsync(new UserAdvert { AdvertId = advert.Id,UserId = currentUser.Id });
+            await userAdverts.SaveAsync();
         }
     }
 }
