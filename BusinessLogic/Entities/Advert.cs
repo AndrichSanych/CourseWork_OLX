@@ -1,4 +1,6 @@
 ﻿
+using BusinessLogic.Entities.Filter;
+
 namespace BusinessLogic.Entities
 {
     public class Advert:BaseEntity
@@ -32,5 +34,6 @@ namespace BusinessLogic.Entities
         public ICollection<Image> Images { get; set; } = new HashSet<Image>();
        
         public ICollection<UserAdvert> UserFavouriteAdverts { get; set; } = new HashSet<UserAdvert>();
+        public ICollection<AdvertValue> Values { get; set; } = new HashSet<AdvertValue>();
     }
 }
