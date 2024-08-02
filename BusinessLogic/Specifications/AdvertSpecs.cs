@@ -1,5 +1,6 @@
 ﻿using Ardalis.Specification;
 using BusinessLogic.Entities;
+using BusinessLogic.Entities.Filter;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,10 +1,13 @@
 ﻿using Bogus;
 using BusinessLogic.Entities;
+using BusinessLogic.Entities.Filter;
 using BusinessLogic.Helpers;
 using BusinessLogic.Interfaces;
+using CourseWork_OLX.Models.CategoryConfigModels;
 using Microsoft.AspNetCore.Identity;
 using SixLabors.ImageSharp;
 using System.Data;
+using System.Threading.Tasks;
 
 
 namespace CourseWork_OLX.Extensions
@@ -17,7 +20,7 @@ namespace CourseWork_OLX.Extensions
             using var scope = app.GetRequiredService<IServiceScopeFactory>().CreateScope();
             var userManager = app.GetRequiredService<UserManager<User>>();
             var imageService = scope.ServiceProvider.GetService<IImageService>()
-                ?? throw new NullReferenceException("IImageService"); 
+                ?? throw new NullReferenceException("IImageService");
 
             var users = scope.ServiceProvider.GetService<IRepository<User>>()
                  ?? throw new NullReferenceException("IRepository<User>");
@@ -27,6 +30,8 @@ namespace CourseWork_OLX.Extensions
                 ?? throw new NullReferenceException("IRepository<User>");
             var adverts = scope.ServiceProvider.GetService<IRepository<Advert>>()
                ?? throw new NullReferenceException("IRepository<User>");
+            var filters = scope.ServiceProvider.GetService<IRepository<Filter>>()
+              ?? throw new NullReferenceException("IRepository<Filter>");
             var roleManager = app.GetRequiredService<RoleManager<IdentityRole>>();
             using var httpClient = new HttpClient();
 
@@ -38,7 +43,7 @@ namespace CourseWork_OLX.Extensions
                     await roleManager.CreateAsync(new IdentityRole(role));
                 }
             }
-        
+
             if (!await users.AnyAsync())
             {
                 string username = config["Admin:Email"]
@@ -70,17 +75,33 @@ namespace CourseWork_OLX.Extensions
                 Faker faker = new();
                 var fakeCategories = config
                     .GetSection("Categories")
-                    .Get<string[]>()
+                    .Get<CategoryConfig[]>()
                     ?? throw new Exception("Configuration Categories is invalid");
-                var categoryEntities = fakeCategories.Select(name => new Category{Name = name}).ToList();
-                foreach (var category in categoryEntities)
-                {
-                    var imageUrl = faker.Image.LoremFlickrUrl(keywords: category.Name, width: 1000, height: 800);
+                var categoryEntities =  fakeCategories.Select(async (config) => {
+                    var imageUrl = faker.Image.LoremFlickrUrl(keywords: "computer,amd,intel,sony,nokia", width: 1000, height: 800);
                     var imageBytes = await httpClient.GetByteArrayAsync(imageUrl);
-                    category.Image = await imageService.SaveImageAsync(imageBytes);
-                }
+                    var image = await imageService.SaveImageAsync(imageBytes);
+                    return new Category
+                    {
+                        Name = config.Name,
+                        Filters = config.Filters.Select(filter =>
+                        new CategoryFilter
+                        {
+                            Filter = new Filter
+                            {
+                                Name = filter.Name,
+                                Values = filter.Values.Select(x =>
+                                new FilterValue
+                                {
+                                    Value = x
+                                }).ToHashSet()
+                            }
+                        }).ToHashSet(),
+                        Image = image
 
-                await categories.AddRangeAsync(categoryEntities);
+                    };
+                });
+                await categories.AddRangeAsync(await Task.WhenAll(categoryEntities));
                 await categories.SaveAsync();
             }
 
