@@ -26,6 +26,7 @@ namespace BusinessLogic.Specifications
             public GetAdvertValues(int advertId) =>
                 Query
                 .Include(x => x.Values)
+                .Include(x=>x.Filter)
                 .Where(x => x.Values.Any(z => z.AdvertId == advertId));
         }
 
