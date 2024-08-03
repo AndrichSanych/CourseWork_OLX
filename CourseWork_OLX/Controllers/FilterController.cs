@@ -16,7 +16,7 @@ namespace CourseWork_OLX.Controllers
             this.filterService = filterService;
         }
 
-        [HttpGet("adverts-values/{advertId:int}")]
+        [HttpGet("advert-values/{advertId:int}")]
         public async Task<IActionResult> GetAdvertValues([FromRoute] int advertId) => Ok(await filterService.GetAdvertValues(advertId));
 
         [HttpGet("category-filters/{categoryId:int}")]

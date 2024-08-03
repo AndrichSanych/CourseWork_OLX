@@ -2,7 +2,6 @@
 using BusinessLogic.Models.AdvertModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CourseWork_OLX.Controllers
@@ -40,6 +39,11 @@ namespace CourseWork_OLX.Controllers
         [HttpGet("vip/{count:int}")]
         public async Task<IActionResult> GetVipAdverts([FromRoute] int count) => Ok(await advertService.GetVIPAsync(count));
 
+
+        [AllowAnonymous]
+        [HttpPost("findadverts")]
+        public async Task<IActionResult> Create([FromForm] AdvertSearchModel filter) => Ok(await advertService.GetByFilterAsync(filter));
+        
 
         [Authorize(Roles = "User")]
         [HttpPost("create")]

@@ -1,14 +1,16 @@
 ﻿using AutoMapper;
 using BusinessLogic.DTOs;
 using BusinessLogic.Entities;
+using BusinessLogic.Entities.Filter;
 using BusinessLogic.Exceptions;
 using BusinessLogic.Interfaces;
+using BusinessLogic.Models;
 using BusinessLogic.Models.AdvertModels;
 using BusinessLogic.Specifications;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using System.Net;
+
 
 namespace BusinessLogic.Services
 {
@@ -17,6 +19,7 @@ namespace BusinessLogic.Services
         private readonly IMapper mapper;
         private readonly IRepository<Advert> adverts;
         private readonly IRepository<Image> images;
+        private readonly IRepository<FilterValue> values;
         private readonly IImageService imageService;
         private readonly UserManager<User> userManager;
         private readonly IValidator<AdvertCreationModel> advertCreationModelValidator;
@@ -25,6 +28,7 @@ namespace BusinessLogic.Services
         public AdvertService(IMapper mapper,
             IRepository<Advert> adverts,
             IRepository<Image> images,
+            IRepository<FilterValue> values,
             IImageService imageService,
             UserManager<User> userManager,
             IValidator<AdvertCreationModel> validator,
@@ -33,6 +37,7 @@ namespace BusinessLogic.Services
             this.mapper = mapper;
             this.adverts = adverts;
             this.images = images;
+            this.values = values;
             this.imageService = imageService;
             this.userManager = userManager;
             this.advertCreationModelValidator = validator;
@@ -53,6 +58,9 @@ namespace BusinessLogic.Services
 
             var advert = mapper.Map<Advert>(advertModel);
             advert.Date = DateTime.Now;
+            advert.Values = (await values.GetListBySpec(new FilterSpecs.GetValues(advertModel.FilterValues)))
+                .Select(x=> new AdvertValue { FilterValue = x})
+                .ToHashSet();
             for (int i = 0;i < advertModel.ImageFiles.Count; i++)
             {
                 advert.Images.Add(new Image()
@@ -131,6 +139,12 @@ namespace BusinessLogic.Services
                 imageService.DeleteImages(deletedImages.Select(x => x.Name));
             }
             
+        }
+
+        public async Task<SearchResult<Advert,AdvertDto>> GetByFilterAsync(AdvertSearchModel filter) 
+        {
+            var searcObject = new SearchResult<Advert, AdvertDto>(adverts,mapper,filter);
+            return await searcObject.GetResult();
         }
 
         

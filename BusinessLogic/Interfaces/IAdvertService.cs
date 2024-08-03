@@ -1,4 +1,6 @@
 ﻿using BusinessLogic.DTOs;
+using BusinessLogic.Entities;
+using BusinessLogic.Models;
 using BusinessLogic.Models.AdvertModels;
 
 
@@ -7,6 +9,7 @@ namespace BusinessLogic.Interfaces
     public interface IAdvertService
     {
         Task<IEnumerable<AdvertDto>> GetAllAsync();
+        Task<SearchResult<Advert,AdvertDto>> GetByFilterAsync(AdvertSearchModel filter);
         Task<IEnumerable<AdvertDto>> GetByUserEmailAsync(string userEmail);
         Task<AdvertDto> GetByIdAsync(int id);
         Task<IEnumerable<ImageDto>> GetImagesAsync(int id);
