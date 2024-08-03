@@ -1,10 +1,7 @@
-﻿using BusinessLogic.Entities;
-using BusinessLogic.Interfaces;
-using BusinessLogic.Models;
+﻿using BusinessLogic.Interfaces;
 using BusinessLogic.Models.AdvertModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CourseWork_OLX.Controllers

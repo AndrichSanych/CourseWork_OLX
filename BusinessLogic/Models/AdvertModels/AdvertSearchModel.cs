@@ -1,6 +1,4 @@
-﻿using BusinessLogic.DTOs;
-using BusinessLogic.Entities;
-using BusinessLogic.Entities.Filter;
+﻿using BusinessLogic.Entities;
 using BusinessLogic.Exstensions;
 using System.Linq.Expressions;
 

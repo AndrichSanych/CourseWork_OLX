@@ -9,9 +9,8 @@ using BusinessLogic.Models.AdvertModels;
 using BusinessLogic.Specifications;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using System.Net;
-using System.Security.Cryptography.X509Certificates;
+
 
 namespace BusinessLogic.Services
 {
