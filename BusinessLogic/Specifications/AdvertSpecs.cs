@@ -1,9 +1,11 @@
 ﻿using Ardalis.Specification;
 using BusinessLogic.Entities;
 using BusinessLogic.Entities.Filter;
+using BusinessLogic.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
@@ -20,6 +22,7 @@ namespace BusinessLogic.Specifications
                 .Include(x=>x.Images)
                 .Include(x=>x.UserFavouriteAdverts);
         }
+        
 
         public class GetVIP : Specification<Advert>
         {

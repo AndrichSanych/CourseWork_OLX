@@ -10,6 +10,7 @@ namespace BusinessLogic.Interfaces
 {
     public interface IFilterService
     {
+       
         Task<IEnumerable<FilterDto>> GetCategoryFilters(int categoryId);
         Task<IEnumerable<FilterValueDto>> GetAdvertValues(int advertId);
     }

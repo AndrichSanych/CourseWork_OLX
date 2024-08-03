@@ -19,5 +19,6 @@ namespace BusinessLogic.Models.AdvertModels
         public bool IsContractPrice { get; set; }
         public decimal Price { get; set; }
         public List<IFormFile> ImageFiles { get; set; } = [];
+        public int[] FilterValues { get; set; } = [];
     }
 }

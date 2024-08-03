@@ -13,7 +13,9 @@ namespace BusinessLogic.Mapper
     {
         public FilterValueProfile()
         {
-            CreateMap<FilterValue, FilterValueDto>().ReverseMap();
+            CreateMap<FilterValue, FilterValueDto>()
+                .ForMember(x=>x.FilterName,opt=>
+                opt.MapFrom(z=>z.Filter.Name));
         }
     }
 }
