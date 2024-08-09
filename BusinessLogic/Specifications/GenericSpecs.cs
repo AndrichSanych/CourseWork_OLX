@@ -1,6 +1,8 @@
 ﻿using Ardalis.Specification;
 using BusinessLogic.Entities;
+using BusinessLogic.Models;
 using System.Linq.Expressions;
+using System.Timers;
 
 namespace BusinessLogic.Specifications
 {
@@ -8,32 +10,49 @@ namespace BusinessLogic.Specifications
     {
         public class GetByFilter<T> : Specification<T>
         {
-            public GetByFilter(Expression<Func<T, bool>> filter, int skip, int take)
+            public GetByFilter(Expression<Func<T, bool>> filter, SortModel? sortData, int skip, int take)
             {
                 var specification = this as Specification<T>;
                 switch (specification)
                 {
                     case Specification<Advert> spec:
-                        spec.Query.Where(filter as Expression<Func<Advert, bool>>)
-                                    .Include(x => x.Category)
-                                    .Include(x => x.City)
-                                    .Include(x => x.Images)
-                                    .Include(x => x.UserFavouriteAdverts)
-                                    .Skip(skip)
-                                    .Take(take);
-                        break;
-
-                    case Specification<Category> spec:
-                        spec.Query.Where(filter as Expression<Func<Category, bool>>)
-                                      .Include(x => x.Adverts)
-                                      .Skip(skip)
-                                      .Take(take);
+                        spec.Query.Include(x => x.Category)
+                                .Include(x => x.City)
+                                .ThenInclude(x => x.Area)
+                                .Include(x => x.Images)
+                                .Include(x => x.UserFavouriteAdverts)
+                                .Where(filter as Expression<Func<Advert, bool>> ?? (x => false));
+                        if (sortData != null)
+                        {
+                            if (sortData.Descending)
+                            {
+                                spec.Query.OrderByDescending(sortData.SortExpr ?? (x => x));
+                            }
+                            else
+                            {
+                                spec.Query.OrderBy(sortData.SortExpr ?? (x => x));
+                            }
+                        }
+                        spec.Query.Skip(skip)
+                                  .Take(take);
                         break;
 
                     default:
-                        Query.Where(filter)
-                        .Skip(skip)
-                        .Take(take);
+                        Query.Where(filter);
+                        if (sortData != null)
+                        {
+                            if (sortData.Descending)
+                            {
+                                Query.OrderByDescending(sortData.SortExpr as Expression<Func<T, object>> ?? (x => x));
+                            }
+                            else
+                            {
+                                Query.OrderBy(sortData.SortExpr as Expression<Func<T, object>> ?? (x => x));
+                            }
+                        }
+                        Query.Skip(skip)
+                             .Take(take);
+                        
                         break;
                 }
                 

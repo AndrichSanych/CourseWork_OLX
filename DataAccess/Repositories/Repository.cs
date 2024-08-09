@@ -5,6 +5,7 @@ using BusinessLogic.Interfaces;
 using DataAccess.Data;
 using AutoMapper.QueryableExtensions;
 using System.Linq.Expressions;
+using BusinessLogic.Entities;
 
 namespace DataAccess.Repositories
 {
@@ -63,7 +64,6 @@ namespace DataAccess.Repositories
             var evaluator = new SpecificationEvaluator();
             return evaluator.GetQuery(dbSet, specification);
         }
-        public async Task<int> CountAsync(Expression<Func<TEntity, bool>> exp)  => await dbSet.CountAsync(exp);
-
+        public async Task<int> CountAsync(Expression<Func<TEntity, bool>> exp) => await dbSet.CountAsync(exp);
     }
 }

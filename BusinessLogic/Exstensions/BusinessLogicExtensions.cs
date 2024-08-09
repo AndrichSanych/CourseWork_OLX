@@ -1,8 +1,11 @@
 ﻿using BusinessLogic.Interfaces;
+using BusinessLogic.Mapper;
 using BusinessLogic.Services;
 using FluentValidation;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq.Expressions;
+using System.Security.Claims;
 
 
 namespace BusinessLogic.Exstensions
@@ -11,7 +14,9 @@ namespace BusinessLogic.Exstensions
     {
         public static void AddBusinessLogicServices(this IServiceCollection services)
         {
+           
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
             services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<IImageService, ImageService>();
             services.AddScoped<INewPostService, NewPostService>();

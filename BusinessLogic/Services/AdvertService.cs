@@ -141,12 +141,11 @@ namespace BusinessLogic.Services
             
         }
 
-        public async Task<SearchResult<Advert,AdvertDto>> GetByFilterAsync(AdvertSearchModel filter) 
-        {
-            var searcObject = new SearchResult<Advert, AdvertDto>(adverts,mapper,filter);
-            return await searcObject.GetResult();
-        }
+        public async Task<SearchResult<Advert,AdvertDto>> GetByFilterAsync(SearchModel<Advert> filter)  =>
+            await new SearchResult<Advert, AdvertDto>(adverts, mapper, filter).GetResult();
+       
 
-        
+        public async Task<IEnumerable<AdvertDto>> getAdvertsAsync(int[] ids) => mapper.Map<IEnumerable<AdvertDto>>(await adverts.GetListBySpec(new AdvertSpecs.GetAdvertsByIds(ids)));
+                
     }
 }
