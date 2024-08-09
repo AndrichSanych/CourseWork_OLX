@@ -1,5 +1,6 @@
 ﻿using BusinessLogic.DTOs;
 using BusinessLogic.Entities;
+using BusinessLogic.Helpers;
 using BusinessLogic.Models;
 using BusinessLogic.Models.AdvertModels;
 

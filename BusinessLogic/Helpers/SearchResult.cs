@@ -1,14 +1,15 @@
 ﻿using AutoMapper;
 using BusinessLogic.Entities;
 using BusinessLogic.Interfaces;
+using BusinessLogic.Models;
 using BusinessLogic.Specifications;
 using System.Linq.Expressions;
 
 
-namespace BusinessLogic.Models
+namespace BusinessLogic.Helpers
 {
-    public class SearchResult<TEntity,TDto>(IRepository<TEntity> repo, IMapper mapper, SearchModel<TEntity> filter) where TEntity: BaseEntity where TDto:class
-    { 
+    public class SearchResult<TEntity, TDto>(IRepository<TEntity> repo, IMapper mapper, SearchModel<TEntity> filter) where TEntity : BaseEntity where TDto : class
+    {
         public IEnumerable<TDto> Elements { get; set; } = [];
         public int TotalCount { get; set; }
 
@@ -19,7 +20,7 @@ namespace BusinessLogic.Models
 
         public async Task<SearchResult<TEntity, TDto>> GetResult()
         {
-            TotalCount =  await repository.CountAsync(expression);
+            TotalCount = await repository.CountAsync(expression);
             if (filter.Count > 0)
             {
                 int totalPages = (int)Math.Ceiling(TotalCount / (double)filter.Count);
@@ -28,7 +29,7 @@ namespace BusinessLogic.Models
             }
             else filter.Count = TotalCount;
             filter.Page = filter.Page <= 0 ? 1 : filter.Page;
-            Elements =  mapper.Map<IEnumerable<TDto>>( 
+            Elements = mapper.Map<IEnumerable<TDto>>(
                 await repository.GetListBySpec(
                     new GenericSpecs.GetByFilter<TEntity>(
                         filter.GetExpression(),

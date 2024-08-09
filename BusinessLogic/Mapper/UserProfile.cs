@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BusinessLogic.DTOs;
 using BusinessLogic.Entities;
 using BusinessLogic.Models.AccountModels;
 using System;
@@ -15,6 +16,7 @@ namespace BusinessLogic.Mapper
         {
             CreateMap<RegisterUserModel, User>()
                 .ForMember(x => x.UserName, opts => opts.MapFrom(s => s.Email));
+            CreateMap<User, UserDto>().ReverseMap();
         }
     }
 }

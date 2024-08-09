@@ -43,11 +43,11 @@ namespace BusinessLogic.Specifications
                         {
                             if (sortData.Descending)
                             {
-                                Query.OrderByDescending(sortData.SortExpr as Expression<Func<T, object>> ?? (x => x));
+                                Query.OrderByDescending(sortData.SortExpr as Expression<Func<T, object?>> ?? (x => x));
                             }
                             else
                             {
-                                Query.OrderBy(sortData.SortExpr as Expression<Func<T, object>> ?? (x => x));
+                                Query.OrderBy(sortData.SortExpr as Expression<Func<T, object?>> ?? (x => x));
                             }
                         }
                         Query.Skip(skip)

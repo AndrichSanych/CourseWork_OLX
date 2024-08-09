@@ -3,6 +3,7 @@ using BusinessLogic.DTOs;
 using BusinessLogic.Entities;
 using BusinessLogic.Entities.Filter;
 using BusinessLogic.Exceptions;
+using BusinessLogic.Helpers;
 using BusinessLogic.Interfaces;
 using BusinessLogic.Models;
 using BusinessLogic.Models.AdvertModels;

@@ -15,6 +15,11 @@ namespace CourseWork_OLX.Controllers
         private readonly IAccountService accountsService = accountsService;
 
         [AllowAnonymous]
+        [HttpGet("user")]
+        public async Task<IActionResult> GetUser([FromQuery]string userId) => Ok(await accountsService.GetUserAsync(userId));
+       
+
+        [AllowAnonymous]
         [HttpPost("user/register")]
         public async Task<IActionResult> UserRegister([FromForm] RegisterUserModel model)
         {
