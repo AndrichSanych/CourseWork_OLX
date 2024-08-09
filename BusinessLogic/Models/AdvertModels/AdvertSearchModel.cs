@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 
 namespace BusinessLogic.Models.AdvertModels
-{
+{  
     public class AdvertSearchModel:SearchModel<Advert>
     {
         public int? CategoryId { get; set; }
@@ -16,16 +16,16 @@ namespace BusinessLogic.Models.AdvertModels
         public int? AreaId { get; set; }
         public decimal? PriceFrom { get; set; }
         public decimal? PriceTo { get; set; }
-        public int[]? FilterValues { get; set; } = [];
-        
+        public int[] FilterValues { get; set; } = [];   
+       
         public override Expression<Func<Advert, bool>> GetExpression()
         {
             Expression<Func<Advert, bool>> resultExp = x => true;
             Expression<Func<Advert, bool>> searchExpr = x => x.Title.ToLower().Contains(Search.ToLower());
             Expression<Func<Advert, bool>> categoryExpr = x => x.CategoryId == CategoryId;
-            Expression<Func<Advert, bool>> isNewExpr = x => x.IsNew;
-            Expression<Func<Advert, bool>> isVipExpr = x => x.IsVip;
-            Expression<Func<Advert, bool>> isContractPriceExpr = x => x.IsContractPrice;
+            Expression<Func<Advert, bool>> isNewExpr = x => x.IsNew == IsNew;
+            Expression<Func<Advert, bool>> isVipExpr = x => x.IsVip == IsVip;
+            Expression<Func<Advert, bool>> isContractPriceExpr = x => x.IsContractPrice == IsContractPrice;
             Expression<Func<Advert, bool>> areaExpr = x => x.City.AreaId == AreaId;
             Expression<Func<Advert, bool>> cityExpr = x => x.CityId == CityId;
             Expression<Func<Advert, bool>> priceFromExpr = x => x.Price >= PriceFrom;
@@ -51,9 +51,20 @@ namespace BusinessLogic.Models.AdvertModels
                 resultExp = resultExp.AndAlso(priceFromExpr);
             if (PriceTo != null)
                 resultExp = resultExp.AndAlso(priceToExpr);
-            if (FilterValues != null && FilterValues.Length > 0)
+            if (FilterValues != null && FilterValues.Count() > 0)
                 resultExp = resultExp.AndAlso(filterValuesExpr);
             return resultExp;
+        }
+
+        public override SortModel? GetSortData()
+        {
+            return SortIndex switch
+            {
+                1 => new SortModel(x => x.Date, true),
+                2 => new SortModel(x => x.Price, true),
+                3 => new SortModel(x => x.Price, false),
+                _ => null,
+            };
         }
     }
 }

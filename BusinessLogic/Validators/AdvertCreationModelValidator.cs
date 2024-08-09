@@ -39,6 +39,15 @@ namespace BusinessLogic.Validators
                  .NotNull().WithMessage("IsNew must not be null");
             RuleFor(x => x.IsVip)
                  .NotNull().WithMessage("IsVip must not be null");
+            RuleFor(x => x.PhoneNumber)
+               .Matches(@"^\d{3}[-\s]{1}\d{3}[-\s]{1}\d{2}[-\s]{0,1}\d{2}$")
+               .WithMessage("Invalid phone number");
+            RuleFor(x => x.ContactEmail)
+               .EmailAddress()
+               .WithMessage("Invalid email address");
+            RuleFor(x => x.ContactPersone)
+               .NotNull().WithMessage("Contact person must not be null")
+               .NotEmpty().WithMessage("Contact person not be empty");
         }
     }
 }

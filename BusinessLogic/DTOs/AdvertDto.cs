@@ -10,6 +10,14 @@ namespace BusinessLogic.DTOs
 
         public string CityName { get; set; } = string.Empty;
 
+        public string AreaName { get; set; } = string.Empty;
+
+        public string PhoneNumber { get; set; } = string.Empty;
+
+        public string ContactEmail { get; set; } = string.Empty;
+
+        public string ContactPersone { get; set; } = string.Empty;
+
         public int CategoryId { get; set; }
 
         public string CategoryName { get; set; } = string.Empty;
@@ -30,6 +38,6 @@ namespace BusinessLogic.DTOs
 
         public string FirstImage { get; set; } = string.Empty;
 
-        public IEnumerable<string> UserFavorites { get; set; } = [];
+        public bool isFavorite { get; set; }
     }
 }
