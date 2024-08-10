@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BusinessLogic.Models
 {
-    public class SortModel(Expression<Func<Advert, object?>>? sortExpr, bool descending)
+    public class SortData(Expression<Func<Advert, object?>>? sortExpr, bool descending)
     {
         public Expression<Func<Advert, object?>>? SortExpr { get; set; } = sortExpr;
         public bool Descending { get; set; } = descending;

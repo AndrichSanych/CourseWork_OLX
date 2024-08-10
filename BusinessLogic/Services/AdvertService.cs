@@ -24,17 +24,15 @@ namespace BusinessLogic.Services
         private readonly IImageService imageService;
         private readonly UserManager<User> userManager;
         private readonly IValidator<AdvertCreationModel> advertCreationModelValidator;
-        private readonly IValidator<AdvertUpdateModel> advertUpdateModelValidator;
-
+       
         public AdvertService(IMapper mapper,
             IRepository<Advert> adverts,
             IRepository<Image> images,
             IRepository<FilterValue> values,
             IImageService imageService,
             UserManager<User> userManager,
-            IValidator<AdvertCreationModel> validator,
-            IValidator<AdvertUpdateModel> updateValidator)
-        {
+            IValidator<AdvertCreationModel> validator)
+       {
             this.mapper = mapper;
             this.adverts = adverts;
             this.images = images;
@@ -42,7 +40,6 @@ namespace BusinessLogic.Services
             this.imageService = imageService;
             this.userManager = userManager;
             this.advertCreationModelValidator = validator;
-            this.advertUpdateModelValidator = updateValidator;
         }
 
         private async Task<Advert> getWithImage(int id) 
@@ -111,35 +108,50 @@ namespace BusinessLogic.Services
             return mapper.Map<IEnumerable<ImageDto>>(advert.Images);
         }
 
-        public async Task UpdateAsync(AdvertUpdateModel advertModel)
+        public async Task UpdateAsync(AdvertCreationModel advertModel)
         {
-            await advertUpdateModelValidator.ValidateAndThrowAsync(advertModel);
-            var advertImages = await images.GetListBySpec(new ImagesSpecs.GetByAdvertId(advertModel.Id)) ??
-                throw new HttpException("Invalid advert id", HttpStatusCode.BadRequest);
+            await advertCreationModelValidator.ValidateAndThrowAsync(advertModel);
+            var advertImages = await images.GetListBySpec(new ImagesSpecs.GetByAdvertId(advertModel.Id)) 
+                ?? throw new HttpException("Invalid advert id", HttpStatusCode.BadRequest);
             var newAdvert = mapper.Map<Advert>(advertModel);
             adverts.Update(newAdvert);
             await adverts.SaveAsync();
-            var deletedImages = advertImages.Where(x => !advertModel.Images.Any(z => z == x.Name));
+            var deletedImages = advertImages.Where(x => !advertModel.ImageFiles.Any(z => z.FileName == x.Name));
             if (advertModel.ImageFiles.Count > 0) 
             {
-                var newImages =  advertModel.ImageFiles.Select((x,i) => new Image()
+                for (int i = 0; i < advertModel.ImageFiles.Count; i++)
                 {
-                    AdvertId = advertModel.Id,
-                    Name = imageService.SaveImageAsync(advertModel.ImageFiles[i]).Result,
-                    Priority = i  //???ToDo
-                });
-               await images.AddRangeAsync(newImages);
-               await images.SaveAsync();
+                    if (advertModel.ImageFiles[i].ContentType != "old-image")
+                    {
+                       await images.InsertAsync(new Image()
+                        {
+                            AdvertId = advertModel.Id,
+                            Name = imageService.SaveImageAsync(advertModel.ImageFiles[i]).Result,
+                            Priority = i
+                        });
+                    }
+                    else 
+                    {
+                        foreach (var item in advertImages.Where(x=> !deletedImages.Any(z => z.Id == x.Id)))
+                        {
+                            if ((item.Name == advertModel.ImageFiles[i].FileName))
+                            {
+                                item.Priority = i;
+                                images.Update(item);
+                            }
+
+                        }
+                    }
+                }
             }
                      
             if (deletedImages.Any())
             {
                 foreach (var image in deletedImages)
                     images.Delete(image);
-                await images.SaveAsync();
                 imageService.DeleteImages(deletedImages.Select(x => x.Name));
             }
-            
+            await images.SaveAsync();
         }
 
         public async Task<SearchResult<Advert,AdvertDto>> GetByFilterAsync(SearchModel<Advert> filter)  =>

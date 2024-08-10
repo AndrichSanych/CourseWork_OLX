@@ -10,7 +10,7 @@ namespace BusinessLogic.Specifications
     {
         public class GetByFilter<T> : Specification<T>
         {
-            public GetByFilter(Expression<Func<T, bool>> filter, SortModel? sortData, int skip, int take)
+            public GetByFilter(Expression<Func<T, bool>> filter, SortData? sortData, int skip, int take)
             {
                 var specification = this as Specification<T>;
                 switch (specification)

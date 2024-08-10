@@ -9,7 +9,7 @@ namespace BusinessLogic.Models
         public  int Page { get; set; }
         public  int SortIndex { get; set; }
         public abstract Expression<Func<TEntity, bool>> GetExpression();
-        public abstract SortModel? GetSortData();
+        public abstract SortData? GetSortData();
 
     }
 }

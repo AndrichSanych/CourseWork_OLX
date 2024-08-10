@@ -9,6 +9,7 @@ namespace BusinessLogic.Models.AdvertModels
 {
     public class AdvertCreationModel
     {
+        public int Id { get; set; }
         public string UserId { get; set; } = string.Empty;
         public int CityId { get; set; }
         public int CategoryId { get; set; }

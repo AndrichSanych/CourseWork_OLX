@@ -55,6 +55,10 @@ namespace CourseWork_OLX.Controllers
         [HttpPost("favadverts")]
         public async Task<IActionResult> GetFavoriteByFilter([FromForm] FavoriteAdvertSearchModel filter) => Ok(await advertService.GetByFilterAsync(filter));
 
+        [Authorize(Roles = "User")]
+        [HttpPost("useradverts")]
+        public async Task<IActionResult> GetUserAdverts([FromForm] UserAdvertSearchModel filter) => Ok(await advertService.GetByFilterAsync(filter));
+
 
         [Authorize(Roles = "User")]
         [HttpPost("create")]
@@ -66,7 +70,7 @@ namespace CourseWork_OLX.Controllers
 
         [Authorize(Roles = "User")]
         [HttpPut("update")]
-        public async Task<IActionResult> Update([FromForm] AdvertUpdateModel model)
+        public async Task<IActionResult> Update([FromForm] AdvertCreationModel model)
         {
             await advertService.UpdateAsync(model);
             return Ok();

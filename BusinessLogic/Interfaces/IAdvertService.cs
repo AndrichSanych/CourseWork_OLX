@@ -17,7 +17,7 @@ namespace BusinessLogic.Interfaces
         Task<IEnumerable<ImageDto>> GetImagesAsync(int id);
         Task<IEnumerable<AdvertDto>> GetVIPAsync(int count);
         Task CreateAsync(AdvertCreationModel advertModel);
-        Task UpdateAsync(AdvertUpdateModel advertModel);
+        Task UpdateAsync(AdvertCreationModel advertModel);
         Task DeleteAsync(int id);
     }
 }
