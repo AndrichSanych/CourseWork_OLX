@@ -21,6 +21,7 @@ namespace BusinessLogic.Services
         private readonly IRepository<Advert> adverts;
         private readonly IRepository<Image> images;
         private readonly IRepository<FilterValue> values;
+        private readonly IRepository<AdvertValue> advertValues;
         private readonly IImageService imageService;
         private readonly UserManager<User> userManager;
         private readonly IValidator<AdvertCreationModel> advertCreationModelValidator;
@@ -29,6 +30,7 @@ namespace BusinessLogic.Services
             IRepository<Advert> adverts,
             IRepository<Image> images,
             IRepository<FilterValue> values,
+            IRepository<AdvertValue> advertValues,
             IImageService imageService,
             UserManager<User> userManager,
             IValidator<AdvertCreationModel> validator)
@@ -37,6 +39,7 @@ namespace BusinessLogic.Services
             this.adverts = adverts;
             this.images = images;
             this.values = values;
+            this.advertValues = advertValues;
             this.imageService = imageService;
             this.userManager = userManager;
             this.advertCreationModelValidator = validator;
@@ -114,6 +117,15 @@ namespace BusinessLogic.Services
             var advertImages = await images.GetListBySpec(new ImagesSpecs.GetByAdvertId(advertModel.Id)) 
                 ?? throw new HttpException("Invalid advert id", HttpStatusCode.BadRequest);
             var newAdvert = mapper.Map<Advert>(advertModel);
+            var oldValues = await advertValues.GetListBySpec(new AdvertValueSpecs.GetAdvertValues(advertModel.Id));
+            foreach (var item in oldValues)
+            {
+                await advertValues.DeleteAsync(item.Id);
+            }
+            await values.SaveAsync();
+            newAdvert.Values = (await values.GetListBySpec(new FilterSpecs.GetValues(advertModel.FilterValues)))
+               .Select(x => new AdvertValue { AdvertId = advertModel.Id, FilterValue = x })
+               .ToHashSet();
             adverts.Update(newAdvert);
             await adverts.SaveAsync();
             var deletedImages = advertImages.Where(x => !advertModel.ImageFiles.Any(z => z.FileName == x.Name));
