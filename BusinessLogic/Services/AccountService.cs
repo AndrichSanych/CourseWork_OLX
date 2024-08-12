@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BusinessLogic.DTOs;
 using BusinessLogic.Entities;
 using BusinessLogic.Exceptions;
 using BusinessLogic.Helpers;
@@ -67,6 +68,7 @@ namespace BusinessLogic.Services
                 throw new HttpException("This email allready exist", HttpStatusCode.BadRequest);
 
             var user = mapper.Map<User>(model);
+            user.RegisterDate = DateTime.Now;
             if(model.AvatarFile != null)
                user.Avatar = await imageService.SaveImageAsync(model.AvatarFile);
             var result = await userManager.CreateAsync(user, model.Password);
@@ -88,6 +90,13 @@ namespace BusinessLogic.Services
             else
                await userAdverts.InsertAsync(new UserAdvert { AdvertId = advert.Id,UserId = currentUser.Id });
             await userAdverts.SaveAsync();
+        }
+
+        public async Task<UserDto> GetUserAsync(string id)
+        {
+            var user = await userManager.FindByIdAsync(id) 
+                ?? throw new HttpException("Invalid user id", HttpStatusCode.BadRequest);
+            return mapper.Map<UserDto>(user);
         }
     }
 }

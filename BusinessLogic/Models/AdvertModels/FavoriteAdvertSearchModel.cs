@@ -15,13 +15,13 @@ namespace BusinessLogic.Models.AdvertModels
         public override Expression<Func<Advert, bool>> GetExpression() => 
             x => x.UserFavouriteAdverts.Any(z=>z.UserId == UserId);
         
-        public override SortModel? GetSortData()
+        public override SortData? GetSortData()
         {
             return SortIndex switch
             {
-                1 => new SortModel(x => x.Date, true),
-                2 => new SortModel(x => x.Price, true),
-                3 => new SortModel(x => x.Price, false),
+                1 => new SortData(x => x.Date, true),
+                2 => new SortData(x => x.Price, true),
+                3 => new SortData(x => x.Price, false),
                 _ => null,
             };
         }

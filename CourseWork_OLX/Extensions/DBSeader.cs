@@ -60,7 +60,8 @@ namespace CourseWork_OLX.Extensions
                     Email = username,
                     Name = name,
                     Surname = surname,
-                    Avatar = await imageService.SaveImageAsync(base64Image)
+                    Avatar = await imageService.SaveImageAsync(base64Image),
+                    RegisterDate = DateTime.Now
                 };
 
                 var result = await userManager.CreateAsync(user, password);

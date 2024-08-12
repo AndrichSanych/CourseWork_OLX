@@ -10,7 +10,7 @@ namespace BusinessLogic.Specifications
     {
         public class GetByFilter<T> : Specification<T>
         {
-            public GetByFilter(Expression<Func<T, bool>> filter, SortModel? sortData, int skip, int take)
+            public GetByFilter(Expression<Func<T, bool>> filter, SortData? sortData, int skip, int take)
             {
                 var specification = this as Specification<T>;
                 switch (specification)
@@ -43,11 +43,11 @@ namespace BusinessLogic.Specifications
                         {
                             if (sortData.Descending)
                             {
-                                Query.OrderByDescending(sortData.SortExpr as Expression<Func<T, object>> ?? (x => x));
+                                Query.OrderByDescending(sortData.SortExpr as Expression<Func<T, object?>> ?? (x => x));
                             }
                             else
                             {
-                                Query.OrderBy(sortData.SortExpr as Expression<Func<T, object>> ?? (x => x));
+                                Query.OrderBy(sortData.SortExpr as Expression<Func<T, object?>> ?? (x => x));
                             }
                         }
                         Query.Skip(skip)

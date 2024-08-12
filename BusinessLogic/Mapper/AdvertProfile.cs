@@ -32,12 +32,12 @@ namespace BusinessLogic.Mapper
                 .ForMember(x => x.CityName, opt => opt.MapFrom(x => x.City.Name))
                 .ForMember(x => x.FirstImage, opt => opt.MapFrom(x => x.Images.FirstOrDefault(x => x.Priority == 0).Name ?? "Error first image"))
                 .ForMember(x=>x.AreaName,opt=>opt.MapFrom(x=>x.City.Area.Name))
+                .ForMember(x => x.AreaId, opt => opt.MapFrom(x => x.City.Area.Id))
                 .AfterMap<SetAdvertIsFavorite>();
                 
             CreateMap<AdvertDto, Advert>();
             CreateMap<AdvertCreationModel, Advert>();
-            CreateMap<AdvertUpdateModel, Advert>()
-                .ForMember(x=>x.Images,opt=>opt.Ignore());
+            
         }
     }
 }

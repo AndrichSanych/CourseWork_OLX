@@ -12,6 +12,8 @@ namespace BusinessLogic.DTOs
 
         public string AreaName { get; set; } = string.Empty;
 
+        public int AreaId { get; set; }
+
         public string PhoneNumber { get; set; } = string.Empty;
 
         public string ContactEmail { get; set; } = string.Empty;

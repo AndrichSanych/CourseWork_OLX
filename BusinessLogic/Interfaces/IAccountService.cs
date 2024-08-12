@@ -1,4 +1,5 @@
-﻿using BusinessLogic.Models.AccountModels;
+﻿using BusinessLogic.DTOs;
+using BusinessLogic.Models.AccountModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,5 +14,7 @@ namespace BusinessLogic.Interfaces
         Task RegisterUserAsync(RegisterUserModel model);
         Task<AuthResponce> LoginAsync(AuthRequest model);
         Task ToggleFavoriteAdvert(int advertId, ClaimsPrincipal user);
+        Task<UserDto> GetUserAsync(string id);
+
     }
 }
